@@ -1,0 +1,676 @@
+:root {
+    --bg-color: #050510;
+    --orbit-border: rgba(255, 255, 255, 0.15);
+    --sun-color: #f1c40f;
+    --font-main: 'Outfit', sans-serif;
+    --modal-bg: rgba(20, 20, 35, 0.85);
+
+    /* Planet Colors */
+    --mercury-color: #bdc3c7;
+    --venus-color: #e67e22;
+    --earth-color: #2980b9;
+    --mars-color: #c0392b;
+    --jupiter-color: #d35400;
+    --saturn-color: #f39c12;
+    --uranus-color: #22a6b3;
+    --neptune-color: #3867d6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CSS Stars */
+body {
+    background-color: var(--bg-color);
+    color: white;
+    font-family: var(--font-main);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image:
+        radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255, 255, 255, .15) 1px, transparent 2px),
+        radial-gradient(white, rgba(255, 255, 255, .1) 2px, transparent 3px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+    animation: star-drift 100s linear infinite;
+}
+
+@keyframes star-drift {
+    from {
+        background-position: 0 0, 40px 60px, 130px 270px;
+    }
+
+    to {
+        background-position: 550px 550px, 390px 410px, 680px 820px;
+    }
+}
+
+.main-header {
+    position: absolute;
+    text-align: center;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    z-index: 20;
+    /* Increased z-index */
+    pointer-events: none;
+    /* Let clicks pass through header area */
+}
+
+/* Solar System Container - 3D TILT */
+.solar-system {
+    position: relative;
+    width: 100vh;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(0.9) rotateX(75deg);
+    transform-style: preserve-3d;
+}
+
+/* Sun */
+.sun {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #f1c40f, #e67e22);
+    border-radius: 50%;
+    box-shadow: 0 0 40px #f1c40f, 0 0 80px rgba(241, 196, 15, 0.4);
+    transform: rotateX(-75deg);
+    transform-style: preserve-3d;
+    z-index: 1;
+    cursor: pointer;
+}
+
+/* Orbits */
+.orbit {
+    position: absolute;
+    border: 1px solid var(--orbit-border);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
+    transform-style: preserve-3d;
+}
+
+/* Sizes of Orbits */
+.mercury-orbit {
+    width: 120px;
+    height: 120px;
+    animation: rotate 8s linear infinite;
+}
+
+.venus-orbit {
+    width: 180px;
+    height: 180px;
+    animation: rotate 14s linear infinite;
+}
+
+.earth-orbit {
+    width: 260px;
+    height: 260px;
+    animation: rotate 20s linear infinite;
+}
+
+.mars-orbit {
+    width: 340px;
+    height: 340px;
+    animation: rotate 28s linear infinite;
+}
+
+.jupiter-orbit {
+    width: 500px;
+    height: 500px;
+    animation: rotate 60s linear infinite;
+}
+
+.saturn-orbit {
+    width: 640px;
+    height: 640px;
+    animation: rotate 90s linear infinite;
+}
+
+.uranus-orbit {
+    width: 760px;
+    height: 760px;
+    animation: rotate 120s linear infinite;
+}
+
+.neptune-orbit {
+    width: 880px;
+    height: 880px;
+    animation: rotate 160s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: translate(-50%, -50%) rotateZ(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotateZ(360deg);
+    }
+}
+
+/* Planets */
+.planet {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    /* margin-left: -1px; removed to avoid conflict with center calc */
+    transform-style: preserve-3d;
+    pointer-events: none;
+}
+
+/* COUNTER ROTATION for Planets */
+@keyframes counter-rotate {
+    0% {
+        transform: rotateZ(0deg) rotateX(-75deg) scale(1);
+    }
+
+    100% {
+        transform: rotateZ(-360deg) rotateX(-75deg) scale(1);
+    }
+}
+
+/* Apply durations matching orbits */
+.planet.mercury {
+    animation: counter-rotate 8s linear infinite;
+}
+
+.planet.venus {
+    animation: counter-rotate 14s linear infinite;
+}
+
+.planet.earth {
+    animation: counter-rotate 20s linear infinite;
+}
+
+.planet.mars {
+    animation: counter-rotate 28s linear infinite;
+}
+
+.planet.jupiter {
+    animation: counter-rotate 60s linear infinite;
+}
+
+.planet.saturn {
+    animation: counter-rotate 90s linear infinite;
+}
+
+.planet.uranus {
+    animation: counter-rotate 120s linear infinite;
+}
+
+.planet.neptune {
+    animation: counter-rotate 160s linear infinite;
+}
+
+.planet-visual {
+    border-radius: 50%;
+    cursor: pointer;
+    /* transition: transform 0.3s;  Removed transition to avoid conflict or handle differently? 
+       Actually, standard transition works if we don't animate THIS element.
+       We animate .planet (parent). .planet-visual (child) scales.
+    */
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+    transition: transform 0.3s;
+}
+
+.planet-visual:hover {
+    transform: scale(2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Planet Specific Styles */
+.mercury .planet-visual {
+    width: 20px;
+    height: 20px;
+    background: var(--mercury-color);
+    box-shadow: 0 0 5px var(--mercury-color);
+}
+
+.venus .planet-visual {
+    width: 28px;
+    height: 28px;
+    background: var(--venus-color);
+    box-shadow: 0 0 5px var(--venus-color);
+}
+
+.earth .planet-visual {
+    width: 32px;
+    height: 32px;
+    background: var(--earth-color);
+    box-shadow: 0 0 5px var(--earth-color);
+}
+
+.mars .planet-visual {
+    width: 24px;
+    height: 24px;
+    background: var(--mars-color);
+    box-shadow: 0 0 5px var(--mars-color);
+}
+
+.jupiter .planet-visual {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, var(--jupiter-color), #a04000);
+    box-shadow: 0 0 10px var(--jupiter-color);
+}
+
+.saturn .planet-visual {
+    width: 70px;
+    height: 70px;
+    background: var(--saturn-color);
+    box-shadow: 0 0 8px var(--saturn-color);
+}
+
+.uranus .planet-visual {
+    width: 40px;
+    height: 40px;
+    background: var(--uranus-color);
+    box-shadow: 0 0 6px var(--uranus-color);
+}
+
+.neptune .planet-visual {
+    width: 40px;
+    height: 40px;
+    background: var(--neptune-color);
+    box-shadow: 0 0 6px var(--neptune-color);
+}
+
+/* Saturn Ring */
+.saturn .ring {
+    position: absolute;
+    width: 140%;
+    height: 40%;
+    background: transparent;
+    border: 4px solid rgba(200, 200, 200, 0.6);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(20deg);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Moon - Earth's Moon */
+.earth .moon-orbit {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 3s linear infinite;
+    pointer-events: none;
+}
+
+.earth .moon {
+    width: 6px;
+    height: 6px;
+    background: #ccc;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+/* Mars Moons (Phobos and Deimos) */
+.mars-moon1-orbit {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 1.5s linear infinite;
+    pointer-events: none;
+}
+
+.mars-moon2-orbit {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 2.5s linear infinite;
+    pointer-events: none;
+}
+
+.mars-moon {
+    width: 3px;
+    height: 3px;
+    background: #aaa;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 2px rgba(200, 200, 200, 0.4);
+}
+
+/* Jupiter Galilean Moons */
+.jupiter-moon1-orbit {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 2s linear infinite;
+    pointer-events: none;
+}
+
+.jupiter-moon2-orbit {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 3.5s linear infinite;
+    pointer-events: none;
+}
+
+.jupiter-moon3-orbit {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 5s linear infinite;
+    pointer-events: none;
+}
+
+.jupiter-moon4-orbit {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 7s linear infinite;
+    pointer-events: none;
+}
+
+.jupiter-moon {
+    width: 5px;
+    height: 5px;
+    background: #ddd;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 3px rgba(220, 220, 220, 0.5);
+}
+
+/* Saturn Moon (Titan) */
+.saturn-moon-orbit {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 4s linear infinite;
+    pointer-events: none;
+}
+
+.saturn-moon {
+    width: 6px;
+    height: 6px;
+    background: #e8d4a0;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 3px rgba(232, 212, 160, 0.6);
+}
+
+/* Neptune Moon (Triton) */
+.neptune-moon-orbit {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 3s linear infinite;
+    pointer-events: none;
+}
+
+.neptune-moon {
+    width: 5px;
+    height: 5px;
+    background: #b8d4e8;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 3px rgba(184, 212, 232, 0.5);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: var(--modal-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 700px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.close-modal {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.2s;
+}
+
+.close-modal:hover {
+    color: #fff;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Left side of modal: Visual */
+.modal-visual {
+    width: 40%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.planet-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--earth-color);
+    box-shadow: inset -20px -20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Right side: Info */
+.modal-info {
+    width: 60%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.modal-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #fff, #bbb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.modal-description {
+    line-height: 1.6;
+    color: #ccc;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+}
+
+.modal-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-item .material-symbols-rounded {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.stat-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-text .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+}
+
+.stat-text .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .modal-body {
+        flex-direction: column;
+    }
+
+    .modal-visual,
+    .modal-info {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .modal-visual {
+        padding-top: 40px;
+        padding-bottom: 20px;
+    }
+
+    .planet-large {
+        width: 80px;
+        height: 80px;
+    }
+
+    .solar-system {
+        transform: scale(0.9) rotateX(75deg);
+        transform-style: preserve-3d;
+    }
+}
