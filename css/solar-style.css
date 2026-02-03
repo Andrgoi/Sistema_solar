@@ -87,13 +87,190 @@ body {
     background: var(--sun-bg);
     background-size: 200% 100%;
     border-radius: 50%;
-    /* Bright glowing shadows, NO inset dark shadows for the Sun */
     box-shadow: 0 0 50px #f1c40f, 0 0 100px rgba(241, 196, 15, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.4);
     transform: rotateX(-75deg);
     transform-style: preserve-3d;
-    z-index: 1;
+    z-index: 10;
+    /* Move sun above planets/orbits for rays visibility */
     cursor: pointer;
     animation: texture-rotate 20s linear infinite;
+    overflow: hidden;
+}
+
+/* Internal Roiling Gas Movement */
+.sun::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--sun-bg);
+    background-size: 150% 150%;
+    border-radius: 50%;
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+    animation: texture-roil 12s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes texture-roil {
+    0% {
+        background-position: 0% 0%;
+        transform: scale(1);
+    }
+
+    100% {
+        background-position: 100% 100%;
+        transform: scale(1.1);
+    }
+}
+
+/* Solar Corona */
+.sun .corona {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(241, 196, 15, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse-glow 4s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+/* Solar Rays */
+.sun .rays {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300%;
+    height: 300%;
+    background: repeating-conic-gradient(from 0deg,
+            transparent 0deg,
+            rgba(241, 196, 15, 0.2) 10deg,
+            transparent 20deg);
+    border-radius: 50%;
+    animation: rotate-rays 10s linear infinite;
+    mask-image: radial-gradient(circle, black 20%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle, black 20%, transparent 100%);
+    pointer-events: none;
+}
+
+@keyframes pulse-glow {
+    from {
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 0.5;
+    }
+
+    to {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes rotate-rays {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Solar Flares (Exploding Gas) */
+.sun .flares {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.flare {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 40px;
+    background: radial-gradient(ellipse at center, rgba(255, 100, 0, 0.8) 0%, transparent 80%);
+    border-radius: 50%;
+    filter: blur(5px);
+    opacity: 0;
+    transform-origin: bottom center;
+}
+
+/* Randomizing Flare Rotations and Animations */
+.flare:nth-child(1) {
+    transform: translate(-50%, -100%) rotate(0deg);
+    animation: erupt 3s infinite;
+}
+
+.flare:nth-child(2) {
+    transform: translate(-50%, -100%) rotate(72deg);
+    animation: erupt 4s infinite 1s;
+}
+
+.flare:nth-child(3) {
+    transform: translate(-50%, -100%) rotate(144deg);
+    animation: erupt 3.5s infinite 0.5s;
+}
+
+.flare:nth-child(4) {
+    transform: translate(-50%, -100%) rotate(216deg);
+    animation: erupt 4.5s infinite 1.5s;
+}
+
+.flare:nth-child(5) {
+    transform: translate(-50%, -100%) rotate(288deg);
+    animation: erupt 3.2s infinite 2s;
+}
+
+@keyframes erupt {
+    0% {
+        transform: translate(-50%, -100%) rotate(var(--rotation, 0deg)) scale(0);
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    60% {
+        transform: translate(-50%, -160%) rotate(var(--rotation, 0deg)) scale(1.5, 2);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translate(-50%, -200%) rotate(var(--rotation, 0deg)) scale(2, 0.5);
+        opacity: 0;
+    }
+}
+
+/* Overriding individual rotations for keyframes */
+.flare:nth-child(1) {
+    --rotation: 0deg;
+}
+
+.flare:nth-child(2) {
+    --rotation: 72deg;
+}
+
+.flare:nth-child(3) {
+    --rotation: 144deg;
+}
+
+.flare:nth-child(4) {
+    --rotation: 216deg;
+}
+
+.flare:nth-child(5) {
+    --rotation: 288deg;
 }
 
 /* Orbits */
@@ -621,6 +798,23 @@ body {
     animation: float 6s ease-in-out infinite, texture-rotate 20s linear infinite;
     overflow: hidden;
     /* For atmospheric/cloud layers */
+}
+
+/* Roiling Gases for Sun in Modal */
+.planet-large.sun-internal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--sun-bg);
+    background-size: 150% 150%;
+    border-radius: 50%;
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+    animation: texture-roil 8s ease-in-out infinite alternate;
+    pointer-events: none;
 }
 
 /* Clouds layer for Earth in Modal */
