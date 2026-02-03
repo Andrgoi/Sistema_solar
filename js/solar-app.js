@@ -4,7 +4,7 @@ const planetsData = {
         description: "O Sol é a estrela no centro do Sistema Solar. É uma esfera quase perfeita de plasma quente, aquecida até a incandescência por reações de fusão nuclear em seu núcleo. O Sol irradia essa energia principalmente como luz, radiação ultravioleta e radiação infravermelha, e é a fonte mais importante de energia para a vida na Terra.",
         diameter: "1.392.700 km",
         temp: "5.500°C (superfície)",
-        orbit: "",
+        orbit: "Principal",
         distance: "0",
         bg: "var(--sun-bg)"
     },
@@ -19,7 +19,7 @@ const planetsData = {
     },
     venus: {
         name: "Vênus",
-        description: "Vênus é o segundo planeta do Sol e é nomeado em homenagem à deusa romana do amor e da beleza. É o planeta mais quente do sistema solar devido a um efeito estufa descontrolado causado por sua densa atmosfera.",
+        description: "Vênus é o segundo planeta do sistema solar e é nomeado em homenagem à deusa romana do amor e da beleza. É o planeta mais quente do sistema solar devido a um efeito estufa descontrolado causado por sua densa atmosfera.",
         diameter: "12.104 km",
         temp: "462°C",
         orbit: "225 dias",
@@ -28,7 +28,7 @@ const planetsData = {
     },
     earth: {
         name: "Terra",
-        description: "A Terra é o terceiro planeta a partir do Sol e o único objeto astronômico conhecido por abrigar vida. Cerca de 71% da superfície da Terra é coberta por água.",
+        description: "A Terra é o terceiro planeta a partir do sistema Solar e o único objeto astronômico conhecido por abrigar vida. Cerca de 71% da superfície da Terra é coberta por água.",
         diameter: "12.742 km",
         temp: "-88 a 58°C",
         orbit: "365.25 dias",
@@ -37,7 +37,7 @@ const planetsData = {
     },
     mars: {
         name: "Marte",
-        description: "Marte é o quarto planeta a partir do Sol e o segundo menor do Sistema Solar. Muitas vezes é chamado de 'Planeta Vermelho' devido ao óxido de ferro predominante em sua superfície.",
+        description: "Marte é o quarto planeta a partir do sistema Solar e o segundo menor do Sistema Solar. Muitas vezes é chamado de 'Planeta Vermelho' devido ao óxido de ferro predominante em sua superfície.",
         diameter: "6.779 km",
         temp: "-65°C",
         orbit: "687 dias",
@@ -46,7 +46,7 @@ const planetsData = {
     },
     jupiter: {
         name: "Júpiter",
-        description: "Júpiter é o maior planeta do Sistema Solar. É um gigante gasoso com massa um milésimo da do Sol, mas duas vezes e meia a de todos os outros planetas do Sistema Solar juntos. Famoso pela Grande Mancha Vermelha.",
+        description: "Júpiter é o maior planeta do sistema solar. É um gigante gasoso com massa um milésimo da do Sol, mas duas vezes e meia a de todos os outros planetas do Sistema Solar juntos. Famoso pela Grande Mancha Vermelha.",
         diameter: "139.820 km",
         temp: "-110°C",
         orbit: "11.86 anos",
@@ -134,8 +134,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update Visual Background
         const visual = document.getElementById('modal-planet-icon');
         visual.style.backgroundImage = data.bg;
-        visual.classList.remove('has-clouds');
+        visual.classList.remove('has-clouds', 'sun-internal');
 
+        if (planetKey === 'earth') {
+            visual.classList.add('has-clouds');
+        }
+
+        if (planetKey === 'sun') {
+            visual.classList.add('sun-internal');
+        }
         // Match rotation speed from main view if possible
         const mainPlanet = document.querySelector(`.planet.${planetKey} .planet-visual`);
         if (mainPlanet) {
@@ -150,8 +157,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (planetKey === 'sun') {
             visual.style.boxShadow = `0 0 50px #f1c40f, inset 0 0 30px rgba(255,255,255,0.5)`;
+            visual.innerHTML = `
+                <div class="corona" style="width: 150%; height: 150%;"></div>
+                <div class="rays" style="width: 300%; height: 300%;"></div>
+                <div class="flares">
+                    <div class="flare"></div>
+                    <div class="flare"></div>
+                    <div class="flare"></div>
+                    <div class="flare"></div>
+                    <div class="flare"></div>
+                </div>
+            `;
         } else {
             visual.style.boxShadow = `inset -20px -20px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.2)`;
+            visual.innerHTML = '';
         }
 
         // Show
@@ -166,3 +185,4 @@ document.addEventListener('DOMContentLoaded', () => {
         // orbits.forEach(o => o.style.animationPlayState = 'running');
     }
 });
+
