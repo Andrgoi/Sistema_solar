@@ -905,7 +905,27 @@ body {
 }
 
 /* Mobile Responsiveness */
+@media (max-width: 1024px) {
+    .solar-system {
+        transform: scale(0.7) rotateX(75deg);
+    }
+}
+
 @media (max-width: 768px) {
+    .main-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .main-header p {
+        font-size: 0.9rem;
+        padding: 0 20px;
+    }
+
+    .solar-system {
+        transform: scale(0.5) rotateX(70deg);
+        /* Reduced scale and tilt for mobile info */
+    }
+
     .modal-body {
         flex-direction: column;
     }
@@ -926,8 +946,55 @@ body {
         height: 80px;
     }
 
+    /* Increase hit area for easier tapping on mobile */
+    .planet-visual {
+        transform: scale(1.3);
+    }
+
+    .planet-visual:hover {
+        transform: scale(2.5);
+    }
+}
+
+@media (max-width: 480px) {
     .solar-system {
-        transform: scale(0.9) rotateX(75deg);
-        transform-style: preserve-3d;
+        transform: scale(0.35) rotateX(65deg);
+        /* Even smaller for small phones */
+    }
+
+    .main-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .modal-info h2 {
+        font-size: 2rem;
+    }
+
+    .modal-stats {
+        gap: 10px;
+    }
+
+    .stat-text .value {
+        font-size: 0.9rem;
+    }
+}
+
+/* Landscape Mode Fix */
+@media (max-height: 500px) and (orientation: landscape) {
+    .solar-system {
+        transform: scale(0.4) rotateX(80deg);
+    }
+
+    .main-header {
+        top: 5px;
+    }
+
+    .main-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .main-header p {
+        display: none;
+        /* Hide description in tight landscape */
     }
 }
