@@ -4,9 +4,9 @@ const planetsData = {
         description: "O Sol é a estrela no centro do Sistema Solar. É uma esfera quase perfeita de plasma quente, aquecida até a incandescência por reações de fusão nuclear em seu núcleo. O Sol irradia essa energia principalmente como luz, radiação ultravioleta e radiação infravermelha, e é a fonte mais importante de energia para a vida na Terra.",
         diameter: "1.392.700 km",
         temp: "5.500°C (superfície)",
-        orbit: "N/A",
+        orbit: "",
         distance: "0",
-        color: "#f1c40f"
+        bg: "var(--sun-bg)"
     },
     mercury: {
         name: "Mercúrio",
@@ -15,7 +15,7 @@ const planetsData = {
         temp: "-173 a 427°C",
         orbit: "88 dias",
         distance: "57.9",
-        color: "#bdc3c7"
+        bg: "var(--mercury-bg)"
     },
     venus: {
         name: "Vênus",
@@ -24,7 +24,7 @@ const planetsData = {
         temp: "462°C",
         orbit: "225 dias",
         distance: "108.2",
-        color: "#e67e22"
+        bg: "var(--venus-bg)"
     },
     earth: {
         name: "Terra",
@@ -33,7 +33,7 @@ const planetsData = {
         temp: "-88 a 58°C",
         orbit: "365.25 dias",
         distance: "149.6",
-        color: "#2980b9"
+        bg: "var(--earth-bg)"
     },
     mars: {
         name: "Marte",
@@ -42,7 +42,7 @@ const planetsData = {
         temp: "-65°C",
         orbit: "687 dias",
         distance: "227.9",
-        color: "#c0392b"
+        bg: "var(--mars-bg)"
     },
     jupiter: {
         name: "Júpiter",
@@ -51,7 +51,7 @@ const planetsData = {
         temp: "-110°C",
         orbit: "11.86 anos",
         distance: "778.5",
-        color: "#d35400"
+        bg: "var(--jupiter-bg)"
     },
     saturn: {
         name: "Saturno",
@@ -60,7 +60,7 @@ const planetsData = {
         temp: "-140°C",
         orbit: "29.45 anos",
         distance: "1.4 bi",
-        color: "#f39c12"
+        bg: "var(--saturn-bg)"
     },
     uranus: {
         name: "Urano",
@@ -69,7 +69,7 @@ const planetsData = {
         temp: "-195°C",
         orbit: "84 anos",
         distance: "2.9 bi",
-        color: "#22a6b3"
+        bg: "var(--uranus-bg)"
     },
     neptune: {
         name: "Netuno",
@@ -78,7 +78,7 @@ const planetsData = {
         temp: "-200°C",
         orbit: "164.8 anos",
         distance: "4.5 bi",
-        color: "#3867d6"
+        bg: "var(--neptune-bg)"
     }
 };
 
@@ -131,10 +131,28 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modal-orbit').textContent = data.orbit;
         document.getElementById('modal-distance').textContent = data.distance + " km";
 
-        // Update Visual Color
+        // Update Visual Background
         const visual = document.getElementById('modal-planet-icon');
-        visual.style.background = data.color;
-        visual.style.boxShadow = `inset -20px -20px 40px rgba(0,0,0,0.5), 0 0 30px ${data.color}`;
+        visual.style.backgroundImage = data.bg;
+        visual.classList.remove('has-clouds');
+
+        // Match rotation speed from main view if possible
+        const mainPlanet = document.querySelector(`.planet.${planetKey} .planet-visual`);
+        if (mainPlanet) {
+            visual.style.animationDuration = `6s, ${getComputedStyle(mainPlanet).animationDuration}`;
+        } else if (planetKey === 'sun') {
+            visual.style.animationDuration = `6s, 20s`;
+        }
+
+        if (planetKey === 'earth') {
+            visual.classList.add('has-clouds');
+        }
+
+        if (planetKey === 'sun') {
+            visual.style.boxShadow = `0 0 50px #f1c40f, inset 0 0 30px rgba(255,255,255,0.5)`;
+        } else {
+            visual.style.boxShadow = `inset -20px -20px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.2)`;
+        }
 
         // Show
         modal.style.display = 'flex';

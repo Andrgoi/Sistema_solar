@@ -5,15 +5,18 @@
     --font-main: 'Outfit', sans-serif;
     --modal-bg: rgba(20, 20, 35, 0.85);
 
-    /* Planet Colors */
-    --mercury-color: #bdc3c7;
-    --venus-color: #e67e22;
-    --earth-color: #2980b9;
-    --mars-color: #c0392b;
-    --jupiter-color: #d35400;
-    --saturn-color: #f39c12;
-    --uranus-color: #22a6b3;
-    --neptune-color: #3867d6;
+    /* Satellite Textures */
+    --sun-bg: url('https://www.solarsystemscope.com/textures/download/2k_sun.jpg');
+    --mercury-bg: url('https://www.solarsystemscope.com/textures/download/2k_mercury.jpg');
+    --venus-bg: url('https://www.solarsystemscope.com/textures/download/2k_venus_surface.jpg');
+    --earth-bg: url('https://www.solarsystemscope.com/textures/download/2k_earth_daymap.jpg');
+    --mars-bg: url('https://www.solarsystemscope.com/textures/download/2k_mars.jpg');
+    --jupiter-bg: url('https://www.solarsystemscope.com/textures/download/2k_jupiter.jpg');
+    --saturn-bg: url('https://www.solarsystemscope.com/textures/download/2k_saturn.jpg');
+    --uranus-bg: url('https://www.solarsystemscope.com/textures/download/2k_uranus.jpg');
+    --neptune-bg: url('https://www.solarsystemscope.com/textures/download/2k_neptune.jpg');
+
+    --glow-light: rgba(255, 255, 255, 0.4);
 }
 
 * {
@@ -81,13 +84,16 @@ body {
     position: absolute;
     width: 60px;
     height: 60px;
-    background: radial-gradient(circle, #f1c40f, #e67e22);
+    background: var(--sun-bg);
+    background-size: 200% 100%;
     border-radius: 50%;
-    box-shadow: 0 0 40px #f1c40f, 0 0 80px rgba(241, 196, 15, 0.4);
+    /* Bright glowing shadows, NO inset dark shadows for the Sun */
+    box-shadow: 0 0 50px #f1c40f, 0 0 100px rgba(241, 196, 15, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.4);
     transform: rotateX(-75deg);
     transform-style: preserve-3d;
     z-index: 1;
     cursor: pointer;
+    animation: texture-rotate 20s linear infinite;
 }
 
 /* Orbits */
@@ -216,6 +222,17 @@ body {
     animation: counter-rotate 160s linear infinite;
 }
 
+/* Surface Texture Rotation */
+@keyframes texture-rotate {
+    from {
+        background-position: 0% 50%;
+    }
+
+    to {
+        background-position: 200% 50%;
+    }
+}
+
 .planet-visual {
     border-radius: 50%;
     cursor: pointer;
@@ -238,57 +255,85 @@ body {
 .mercury .planet-visual {
     width: 20px;
     height: 20px;
-    background: var(--mercury-color);
-    box-shadow: 0 0 5px var(--mercury-color);
+    background: var(--mercury-bg);
+    background-size: 200% 100%;
+    animation: texture-rotate 10s linear infinite;
+    box-shadow: inset -4px -4px 6px rgba(0, 0, 0, 0.8), 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
 .venus .planet-visual {
     width: 28px;
     height: 28px;
-    background: var(--venus-color);
-    box-shadow: 0 0 5px var(--venus-color);
+    background: var(--venus-bg);
+    background-size: 200% 100%;
+    animation: texture-rotate 15s linear infinite;
+    box-shadow: inset -6px -6px 10px rgba(0, 0, 0, 0.8), 0 0 10px rgba(230, 126, 34, 0.4);
 }
 
 .earth .planet-visual {
     width: 32px;
     height: 32px;
-    background: var(--earth-color);
-    box-shadow: 0 0 5px var(--earth-color);
+    background: var(--earth-bg);
+    background-size: 200% 100%;
+    animation: texture-rotate 20s linear infinite;
+    box-shadow: inset -8px -8px 12px rgba(0, 0, 0, 0.8), 0 0 15px rgba(52, 152, 219, 0.5);
+}
+
+.earth .planet-visual::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: repeating-radial-gradient(circle at 50% 50%, transparent, rgba(255, 255, 255, 0.1) 2px, transparent 4px);
+    opacity: 0.3;
 }
 
 .mars .planet-visual {
     width: 24px;
     height: 24px;
-    background: var(--mars-color);
-    box-shadow: 0 0 5px var(--mars-color);
+    background: var(--mars-bg);
+    background-size: 200% 100%;
+    animation: texture-rotate 25s linear infinite;
+    box-shadow: inset -5px -5px 8px rgba(0, 0, 0, 0.8), 0 0 8px rgba(192, 57, 43, 0.4);
 }
 
 .jupiter .planet-visual {
     width: 80px;
     height: 80px;
-    background: linear-gradient(45deg, var(--jupiter-color), #a04000);
-    box-shadow: 0 0 10px var(--jupiter-color);
+    background: var(--jupiter-bg);
+    background-size: 200% 100%;
+    animation: texture-rotate 30s linear infinite;
+    box-shadow: inset -15px -15px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(211, 84, 0, 0.3);
 }
 
 .saturn .planet-visual {
     width: 70px;
     height: 70px;
-    background: var(--saturn-color);
-    box-shadow: 0 0 8px var(--saturn-color);
+    background: var(--saturn-bg);
+    background-size: 200% 100%;
+    animation: texture-rotate 35s linear infinite;
+    box-shadow: inset -12px -12px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(243, 156, 18, 0.3);
 }
 
 .uranus .planet-visual {
     width: 40px;
     height: 40px;
-    background: var(--uranus-color);
-    box-shadow: 0 0 6px var(--uranus-color);
+    background: var(--uranus-bg);
+    background-size: 200% 100%;
+    animation: texture-rotate 40s linear infinite;
+    box-shadow: inset -8px -8px 15px rgba(0, 0, 0, 0.8), 0 0 15px rgba(34, 166, 179, 0.4);
 }
 
 .neptune .planet-visual {
     width: 40px;
     height: 40px;
-    background: var(--neptune-color);
-    box-shadow: 0 0 6px var(--neptune-color);
+    background: var(--neptune-bg);
+    background-size: 200% 100%;
+    animation: texture-rotate 45s linear infinite;
+    box-shadow: inset -8px -8px 15px rgba(0, 0, 0, 0.8), 0 0 15px rgba(52, 73, 94, 0.6);
 }
 
 /* Saturn Ring */
@@ -570,9 +615,26 @@ body {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: var(--earth-color);
-    box-shadow: inset -20px -20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
-    animation: float 6s ease-in-out infinite;
+    position: relative;
+    background-size: 200% 100%;
+    box-shadow: inset -20px -20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite, texture-rotate 20s linear infinite;
+    overflow: hidden;
+    /* For atmospheric/cloud layers */
+}
+
+/* Clouds layer for Earth in Modal */
+.planet-large.has-clouds::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: repeating-radial-gradient(circle at 50% 50%, transparent, rgba(255, 255, 255, 0.1) 5px, transparent 10px);
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 @keyframes float {
@@ -603,6 +665,7 @@ body {
     margin-bottom: 10px;
     background: linear-gradient(to right, #fff, #bbb);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
